@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Folzy — Developer</title>
-<meta name="description" content="Personal portfolio of Folzy — software projects, tools and experiments.">
+<title>Folzy — Projects</title>
+<meta name="description" content="Проекты Folzy — инструменты, боты, расширения для браузера, игры.">
 <style>
     * {
         margin: 0;
@@ -14,135 +14,234 @@
 
     body {
         font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+        min-height: 100vh;
         background: #050505;
         color: #ffffff;
-        min-height: 100vh;
         overflow-x: hidden;
     }
 
-    .rain-background {
+    /* ---- фон: градиент + дождь на canvas ---- */
+
+    .rain-container {
         position: fixed;
         inset: 0;
-        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        overflow: hidden;
         z-index: -2;
+        pointer-events: none;
     }
 
-    .snow-container {
+    .rain-background {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        filter: blur(8px) grayscale(95%) brightness(0.4) contrast(1.1);
+    }
+
+    #rain-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        filter: blur(0.5px);
+    }
+
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    /* ---- парящие иконки технологий ---- */
+
+    .tech-icons {
         position: fixed;
         inset: 0;
         pointer-events: none;
-        z-index: -1;
-        overflow: hidden;
-    }
-
-    .snowflake {
-        position: absolute;
-        top: -10vh;
-        color: #fff;
-        font-size: 1em;
-        opacity: 0;
-        animation-name: snowflakes-fall, snowflakes-shake;
-        animation-timing-function: linear, ease-in-out;
-        animation-iteration-count: infinite, infinite;
-    }
-
-    @keyframes snowflakes-fall {
-        0% { top: -10vh; opacity: 0; }
-        10% { opacity: 0.5; }
-        100% { top: 110vh; opacity: 0.1; }
-    }
-
-    @keyframes snowflakes-shake {
-        0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(40px); }
-    }
-
-    main {
-        max-width: 720px;
-        margin: 0 auto;
-        padding: 80px 24px 64px;
-        position: relative;
         z-index: 1;
     }
 
-    header {
-        text-align: center;
-        margin-bottom: 56px;
+    .tech-icon {
+        position: absolute;
+        width: 175px;
+        height: 175px;
+        opacity: 0.79;
+        pointer-events: auto;
+        animation: float-icon 8s ease-in-out infinite;
     }
 
-    header h1 {
-        font-size: 2.4rem;
+    .tech-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: grayscale(100%) brightness(1.2);
+        transform: rotate(var(--rot, 0deg));
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;
+        border-radius: 12px;
+    }
+
+    .tech-icon:hover {
+        z-index: 100;
+    }
+
+    .tech-icon:hover img {
+        transform: rotate(var(--rot, 0deg)) scale(1.2);
+        filter: grayscale(0%) brightness(1.1) drop-shadow(0 0 15px rgba(255,255,255,0.2));
+    }
+
+    @keyframes float-icon {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-30px); }
+    }
+
+    .icon-1 { top: 8%;    left: 4%;   --rot: -25deg; animation-delay: 0s; }
+    .icon-2 { top: 12%;   right: 6%;  --rot: 30deg;  animation-delay: 2s; }
+    .icon-3 { bottom: 14%; left: 6%;  --rot: -15deg; animation-delay: 1s; }
+    .icon-4 { bottom: 12%; right: 4%; --rot: 45deg;  animation-delay: 3s; }
+    .icon-5 { top: 45%;   right: 7%;  --rot: 15deg;  animation-delay: 1.5s; }
+    .icon-6 { bottom: 48%; left: 6%;  --rot: -35deg; animation-delay: 2.5s; }
+
+    @media (max-width: 1200px) {
+        .tech-icon { width: 120px; height: 120px; opacity: 0.35; }
+    }
+
+    @media (max-width: 820px) {
+        .tech-icons { display: none; }
+    }
+
+    /* ---- контент ---- */
+
+    .container {
+        position: relative;
+        z-index: 10;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+    }
+
+    .card {
+        background: rgba(30, 30, 30, 0.4);
+        backdrop-filter: blur(25px) saturate(100%);
+        -webkit-backdrop-filter: blur(25px) saturate(100%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 40px;
+        padding: 50px 40px;
+        max-width: 620px;
+        width: 100%;
+        box-shadow:
+            0 40px 80px -20px rgba(0, 0, 0, 0.8),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    }
+
+    @media (max-width: 640px) {
+        .card { padding: 36px 24px; border-radius: 28px; }
+    }
+
+    .card-head {
+        text-align: center;
+        margin-bottom: 36px;
+    }
+
+    .title {
+        font-size: 3rem;
         font-weight: 700;
         background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+        filter: drop-shadow(0 2px 10px rgba(255,255,255,0.1));
     }
 
-    header p {
-        margin-top: 8px;
-        color: rgba(255, 255, 255, 0.55);
-        font-size: 0.95rem;
-        letter-spacing: 0.02em;
+    @media (max-width: 640px) {
+        .title { font-size: 2.1rem; }
+    }
+
+    .code {
+        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 6px 12px;
+        border-radius: 8px;
+        display: inline-block;
+        margin: 14px 0 18px;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
     }
 
     .links {
         display: flex;
         justify-content: center;
         gap: 12px;
-        margin-top: 20px;
+        margin-top: 22px;
         flex-wrap: wrap;
     }
 
     .links a {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 16px;
-        border-radius: 999px;
+        padding: 10px 22px;
+        border-radius: 16px;
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
         color: #ffffff;
         text-decoration: none;
-        font-size: 0.85rem;
-        backdrop-filter: blur(10px);
-        transition: background 0.2s ease, transform 0.2s ease;
+        font-size: 0.9rem;
+        transition: background 0.25s ease, transform 0.25s ease;
     }
 
     .links a:hover {
         background: rgba(255, 255, 255, 0.12);
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 
     .section-label {
-        font-size: 0.75rem;
-        letter-spacing: 0.12em;
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
         color: rgba(255, 255, 255, 0.4);
-        margin-bottom: 16px;
+        margin-bottom: 14px;
+        padding-left: 4px;
     }
 
     .projects {
         display: grid;
-        gap: 16px;
+        gap: 12px;
     }
 
     .project {
         display: block;
-        padding: 24px;
+        padding: 20px 22px;
         border-radius: 20px;
         background: rgba(255, 255, 255, 0.04);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
         text-decoration: none;
         color: inherit;
-        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    /* мягкий блик по верхней кромке, как у кнопок на folzy.ru */
+    .project::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);
+        pointer-events: none;
     }
 
     .project:hover {
-        background: rgba(255, 255, 255, 0.07);
-        border-color: rgba(255, 255, 255, 0.16);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.18);
         transform: translateY(-2px);
     }
 
@@ -151,110 +250,195 @@
         align-items: baseline;
         justify-content: space-between;
         gap: 12px;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .project-name {
-        font-size: 1.05rem;
+        font-size: 1.02rem;
         font-weight: 600;
     }
 
     .project-lang {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         color: rgba(255, 255, 255, 0.45);
         white-space: nowrap;
+        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
     }
 
     .project-desc {
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         line-height: 1.5;
-        color: rgba(255, 255, 255, 0.65);
+        color: rgba(255, 255, 255, 0.62);
     }
 
-    footer {
+    .stats {
+        display: flex;
+        justify-content: space-around;
+        gap: 16px;
+        margin-top: 30px;
+        padding-top: 26px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat {
         text-align: center;
-        margin-top: 64px;
-        color: rgba(255, 255, 255, 0.3);
-        font-size: 0.8rem;
     }
 
-    footer a {
-        color: rgba(255, 255, 255, 0.5);
-        text-decoration: none;
-    }
-
-    footer a:hover {
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
         color: #ffffff;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    .stat-label {
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 4px;
     }
 </style>
 </head>
 <body>
-    <div class="rain-background"></div>
-    <div class="snow-container" id="snow-container"></div>
+    <div class="rain-container">
+        <div class="rain-background"></div>
+        <canvas id="rain-canvas"></canvas>
+    </div>
+    <div class="overlay"></div>
 
-    <main>
-        <header>
-            <h1>Folzy</h1>
-            <p>Software developer — tools, bots, browser extensions</p>
-            <div class="links">
-                <a href="https://github.com/folzy1092" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://t.me/folzybio" target="_blank" rel="noopener">Telegram</a>
+    <div class="tech-icons">
+        <div class="tech-icon icon-1"><img src="static/python.png" alt="Python"></div>
+        <div class="tech-icon icon-2"><img src="static/c.png" alt="C"></div>
+        <div class="tech-icon icon-3"><img src="static/javascript.png" alt="JavaScript"></div>
+        <div class="tech-icon icon-4"><img src="static/html.png" alt="HTML"></div>
+        <div class="tech-icon icon-5"><img src="static/css.png" alt="CSS"></div>
+        <a href="https://t.me/folzybio" target="_blank" rel="noopener" class="tech-icon icon-6"><img src="static/tg.png" alt="Telegram"></a>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-head">
+                <h1 class="title">Folzy</h1>
+                <div class="code">System.out.println("Hello");</div>
+                <p class="subtitle">Developer • Creator • Visionary</p>
+                <div class="links">
+                    <a href="https://github.com/folzy1092" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://t.me/folzybio" target="_blank" rel="noopener">Telegram</a>
+                    <a href="https://folzy.ru" target="_blank" rel="noopener">folzy.ru</a>
+                </div>
             </div>
-        </header>
 
-        <div class="section-label">Projects</div>
-        <div class="projects">
-            <a class="project" href="https://github.com/folzy1092/iOS-PC-Clipboard" target="_blank" rel="noopener">
-                <div class="project-top">
-                    <span class="project-name">iOS-PC-Clipboard</span>
-                    <span class="project-lang">Python</span>
-                </div>
-                <div class="project-desc">Синхронизация буфера обмена между Windows и iPhone по локальной сети — текст и изображения в реальном времени через WebSocket.</div>
-            </a>
+            <div class="section-label">Projects</div>
+            <div class="projects">
+                <a class="project" href="https://github.com/folzy1092/iOS-PC-Clipboard" target="_blank" rel="noopener">
+                    <div class="project-top">
+                        <span class="project-name">iOS-PC-Clipboard</span>
+                        <span class="project-lang">Python</span>
+                    </div>
+                    <div class="project-desc">Синхронизация буфера обмена между Windows и iPhone по локальной сети — текст и изображения в реальном времени через WebSocket.</div>
+                </a>
 
-            <a class="project" href="https://github.com/folzy1092/Web-Converter" target="_blank" rel="noopener">
-                <div class="project-top">
-                    <span class="project-name">Web-Converter</span>
-                    <span class="project-lang">JavaScript</span>
-                </div>
-                <div class="project-desc">Расширение для Brave, Chrome, Edge и Firefox — конвертер валют и криптовалют прямо в браузере.</div>
-            </a>
+                <a class="project" href="https://github.com/folzy1092/Web-Converter" target="_blank" rel="noopener">
+                    <div class="project-top">
+                        <span class="project-name">Web-Converter</span>
+                        <span class="project-lang">JavaScript</span>
+                    </div>
+                    <div class="project-desc">Расширение для Brave, Chrome, Edge и Firefox — конвертер валют и криптовалют прямо в браузере.</div>
+                </a>
 
-            <a class="project" href="https://github.com/folzy1092/live-music-bot" target="_blank" rel="noopener">
-                <div class="project-top">
-                    <span class="project-name">live-music-bot</span>
-                    <span class="project-lang">Python</span>
-                </div>
-                <div class="project-desc">Telegram-бот показывает текущий трек из Яндекс.Музыки или SoundCloud — в Bio, живым постом в канале и в отображаемом имени.</div>
-            </a>
+                <a class="project" href="https://github.com/folzy1092/live-music-bot" target="_blank" rel="noopener">
+                    <div class="project-top">
+                        <span class="project-name">live-music-bot</span>
+                        <span class="project-lang">Python</span>
+                    </div>
+                    <div class="project-desc">Telegram-бот показывает текущий трек из Яндекс.Музыки или SoundCloud — в Bio, живым постом в канале и в отображаемом имени.</div>
+                </a>
 
-            <a class="project" href="https://github.com/folzy1092/Yandex-Game" target="_blank" rel="noopener">
-                <div class="project-top">
-                    <span class="project-name">Drone Strike</span>
-                    <span class="project-lang">C#</span>
+                <a class="project" href="https://github.com/folzy1092/Yandex-Game" target="_blank" rel="noopener">
+                    <div class="project-top">
+                        <span class="project-name">Drone Strike</span>
+                        <span class="project-lang">C#</span>
+                    </div>
+                    <div class="project-desc">Симулятор ударного FPV-дрона для Яндекс Игр — дрон-камикадзе уничтожает наземные цели, три карты, HUD, реклама.</div>
+                </a>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Projects</div>
                 </div>
-                <div class="project-desc">Симулятор ударного FPV-дрона для Яндекс Игр — дрон-камикадзе уничтожает наземные цели, три карты, HUD, реклама, готов к модерации.</div>
-            </a>
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Languages</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Commits</div>
+                </div>
+            </div>
         </div>
-
-        <footer>
-            <a href="https://github.com/folzy1092" target="_blank" rel="noopener">github.com/folzy1092</a>
-        </footer>
-    </main>
+    </div>
 
     <script>
-        const container = document.getElementById('snow-container');
-        const flakeCount = 40;
-        for (let i = 0; i < flakeCount; i++) {
-            const flake = document.createElement('div');
-            flake.className = 'snowflake';
-            flake.textContent = '❅';
-            flake.style.left = Math.random() * 100 + 'vw';
-            flake.style.fontSize = (Math.random() * 0.8 + 0.4) + 'em';
-            flake.style.animationDuration = (Math.random() * 8 + 6) + 's, ' + (Math.random() * 3 + 2) + 's';
-            flake.style.animationDelay = (Math.random() * 8) + 's, 0s';
-            container.appendChild(flake);
+        // Дождь на canvas — тот же эффект, что на folzy.ru.
+        let rainCanvas, rainCtx, raindrops = [], rainAnimationId = null;
+
+        function resizeRainCanvas() {
+            rainCanvas.width = window.innerWidth;
+            rainCanvas.height = window.innerHeight;
+            updateRaindrops();
         }
+
+        function updateRaindrops() {
+            raindrops = [];
+            // На узких экранах капель меньше — эффект тот же, нагрузка ниже.
+            const count = window.innerWidth < 820 ? 40 : 90;
+            for (let i = 0; i < count; i++) {
+                const width = 2 + Math.random() * 4;
+                const height = width * (2 + Math.random() * 3);
+                raindrops.push({
+                    x: Math.random() * rainCanvas.width,
+                    y: Math.random() * rainCanvas.height - rainCanvas.height,
+                    width: width,
+                    height: height,
+                    speed: 8 + Math.random() * 6,
+                    opacity: 0.4 + Math.random() * 0.4
+                });
+            }
+            if (!rainAnimationId) {
+                animateRain();
+            }
+        }
+
+        function animateRain() {
+            rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+            for (const drop of raindrops) {
+                rainCtx.fillStyle = `rgba(200, 200, 200, ${drop.opacity * 0.3})`;
+                rainCtx.beginPath();
+                rainCtx.ellipse(drop.x, drop.y, drop.width / 2, drop.height / 2, Math.PI, 0, Math.PI * 2);
+                rainCtx.fill();
+
+                rainCtx.strokeStyle = `rgba(255, 255, 255, ${drop.opacity * 0.15})`;
+                rainCtx.lineWidth = 0.5;
+                rainCtx.beginPath();
+                rainCtx.ellipse(drop.x + 0.5, drop.y + 0.5, (drop.width - 1) / 2, (drop.height - 1) / 2, Math.PI, 0, Math.PI * 2);
+                rainCtx.stroke();
+
+                drop.y += drop.speed;
+                if (drop.y > rainCanvas.height + 50) {
+                    drop.y = -50;
+                    drop.x = Math.random() * rainCanvas.width;
+                }
+            }
+            rainAnimationId = requestAnimationFrame(animateRain);
+        }
+
+        rainCanvas = document.getElementById('rain-canvas');
+        rainCtx = rainCanvas.getContext('2d', { alpha: true });
+        resizeRainCanvas();
+        window.addEventListener('resize', resizeRainCanvas);
     </script>
 </body>
 </html>
