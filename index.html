@@ -33,7 +33,10 @@
     .rain-background {
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        background-color: #1a1a1a;
+        background-image: linear-gradient(135deg, rgba(26,26,26,0.7) 0%, rgba(13,13,13,0.7) 100%), url('static/photo_4.jpg');
+        background-size: cover;
+        background-position: center;
         filter: blur(8px) grayscale(95%) brightness(0.4) contrast(1.1);
     }
 
@@ -144,6 +147,28 @@
     .card-head {
         text-align: center;
         margin-bottom: 36px;
+    }
+
+    .logo {
+        width: 96px;
+        height: 96px;
+        margin: 0 auto 25px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+
+    .logo img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 12px;
+        padding: 8px;
     }
 
     .title {
@@ -319,6 +344,7 @@
     <div class="container">
         <div class="card">
             <div class="card-head">
+                <div class="logo"><img src="static/bmw.gif" alt="Folzy"></div>
                 <h1 class="title">Folzy</h1>
                 <div class="code">System.out.println("Hello");</div>
                 <p class="subtitle">Developer • Creator • Visionary</p>
