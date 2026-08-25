@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Folzy — Developer</title>
+<meta name="description" content="Personal portfolio of Folzy — software projects, tools and experiments.">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+        background: #050505;
+        color: #ffffff;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    .rain-background {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        z-index: -2;
+    }
+
+    .snow-container {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .snowflake {
+        position: absolute;
+        top: -10vh;
+        color: #fff;
+        font-size: 1em;
+        opacity: 0;
+        animation-name: snowflakes-fall, snowflakes-shake;
+        animation-timing-function: linear, ease-in-out;
+        animation-iteration-count: infinite, infinite;
+    }
+
+    @keyframes snowflakes-fall {
+        0% { top: -10vh; opacity: 0; }
+        10% { opacity: 0.5; }
+        100% { top: 110vh; opacity: 0.1; }
+    }
+
+    @keyframes snowflakes-shake {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(40px); }
+    }
+
+    main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 80px 24px 64px;
+        position: relative;
+        z-index: 1;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 56px;
+    }
+
+    header h1 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+        margin-top: 8px;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 0.95rem;
+        letter-spacing: 0.02em;
+    }
+
+    .links {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .links a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 0.85rem;
+        backdrop-filter: blur(10px);
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .links a:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-1px);
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 16px;
+    }
+
+    .projects {
+        display: grid;
+        gap: 16px;
+    }
+
+    .project {
+        display: block;
+        padding: 24px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .project:hover {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.16);
+        transform: translateY(-2px);
+    }
+
+    .project-top {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .project-name {
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .project-lang {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.45);
+        white-space: nowrap;
+    }
+
+    .project-desc {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.65);
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 64px;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 0.8rem;
+    }
+
+    footer a {
+        color: rgba(255, 255, 255, 0.5);
+        text-decoration: none;
+    }
+
+    footer a:hover {
+        color: #ffffff;
+    }
+</style>
+</head>
+<body>
+    <div class="rain-background"></div>
+    <div class="snow-container" id="snow-container"></div>
+
+    <main>
+        <header>
+            <h1>Folzy</h1>
+            <p>Software developer — tools, bots, browser extensions</p>
+            <div class="links">
+                <a href="https://github.com/folzy1092" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://t.me/folzybio" target="_blank" rel="noopener">Telegram</a>
+            </div>
+        </header>
+
+        <div class="section-label">Projects</div>
+        <div class="projects">
+            <a class="project" href="https://github.com/folzy1092/iOS-PC-Clipboard" target="_blank" rel="noopener">
+                <div class="project-top">
+                    <span class="project-name">iOS-PC-Clipboard</span>
+                    <span class="project-lang">Python</span>
+                </div>
+                <div class="project-desc">Синхронизация буфера обмена между Windows и iPhone по локальной сети — текст и изображения в реальном времени через WebSocket.</div>
+            </a>
+
+            <a class="project" href="https://github.com/folzy1092/Web-Converter" target="_blank" rel="noopener">
+                <div class="project-top">
+                    <span class="project-name">Web-Converter</span>
+                    <span class="project-lang">JavaScript</span>
+                </div>
+                <div class="project-desc">Расширение для Brave, Chrome, Edge и Firefox — конвертер валют и криптовалют прямо в браузере.</div>
+            </a>
+
+            <a class="project" href="https://github.com/folzy1092/Music-Live-TG-BOT" target="_blank" rel="noopener">
+                <div class="project-top">
+                    <span class="project-name">Music-Live-TG-BOT</span>
+                    <span class="project-lang">Python</span>
+                </div>
+                <div class="project-desc">Telegram-бот для отслеживания музыки из Яндекс.Музыки и SoundCloud, с AI-функциями.</div>
+            </a>
+
+            <a class="project" href="https://github.com/folzy1092/Yandex-Game" target="_blank" rel="noopener">
+                <div class="project-top">
+                    <span class="project-name">Epic Battle 3D</span>
+                    <span class="project-lang">C#</span>
+                </div>
+                <div class="project-desc">Браузерный 3D-шутер от первого лица для Яндекс Игр — полностью offline, боты с простым AI, карты как отдельные сцены.</div>
+            </a>
+        </div>
+
+        <footer>
+            <a href="https://github.com/folzy1092" target="_blank" rel="noopener">github.com/folzy1092</a>
+        </footer>
+    </main>
+
+    <script>
+        const container = document.getElementById('snow-container');
+        const flakeCount = 40;
+        for (let i = 0; i < flakeCount; i++) {
+            const flake = document.createElement('div');
+            flake.className = 'snowflake';
+            flake.textContent = '❅';
+            flake.style.left = Math.random() * 100 + 'vw';
+            flake.style.fontSize = (Math.random() * 0.8 + 0.4) + 'em';
+            flake.style.animationDuration = (Math.random() * 8 + 6) + 's, ' + (Math.random() * 3 + 2) + 's';
+            flake.style.animationDelay = (Math.random() * 8) + 's, 0s';
+            container.appendChild(flake);
+        }
+    </script>
+</body>
+</html>
