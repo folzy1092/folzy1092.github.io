@@ -474,5 +474,29 @@
         resizeRainCanvas();
         window.addEventListener('resize', resizeRainCanvas);
     </script>
+    <script>
+    // Уведомление о заходе (Telegram через Cloudflare Worker, токен на сайте не хранится)
+    (function () {
+        var WORKER_URL = 'https://folzy-visit-notify.CHANGE-ME.workers.dev';
+        if (WORKER_URL.indexOf('CHANGE-ME') !== -1) return;
+        try {
+            var last = +localStorage.getItem('visit_notified') || 0;
+            if (Date.now() - last < 30 * 60 * 1000) return;
+            localStorage.setItem('visit_notified', Date.now());
+        } catch (e) {}
+        fetch(WORKER_URL, {
+            method: 'POST',
+            keepalive: true,
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+                page: location.pathname + location.search,
+                referrer: document.referrer,
+                lang: navigator.language,
+                screen: screen.width + 'x' + screen.height,
+                tz: Intl.DateTimeFormat().resolvedOptions().timeZone
+            })
+        }).catch(function () {});
+    })();
+    </script>
 </body>
 </html>
